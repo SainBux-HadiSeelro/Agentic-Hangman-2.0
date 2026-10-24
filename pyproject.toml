@@ -3,11 +3,7 @@ name = "agentic-hangman-2-0"
 version = "2.0.0"
 description = "Agentic Hangman 2.0: Cyberpunk Web Terminal powered by an Autonomous 24/7 AI Resident Agent (NEXUS-7), interactive keypad, and portfolio intelligence."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
-    "streamlit>=1.45.0",
+    "streamlit",
 ]
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
