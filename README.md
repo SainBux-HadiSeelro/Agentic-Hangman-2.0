@@ -146,11 +146,9 @@ Open `http://localhost:8501` in your browser to enter the cyber terminal!
 ├── app.py                # ⚡ Main Streamlit Cyberpunk UI & Game FSM
 ├── agent.py              # 🤖 NEXUS-7 Autonomous 24/7 AI Resident Agent
 ├── requirements.txt      # 📦 Core Python production dependencies
-├── pyproject.toml        # ⚙️ Project metadata and build configuration
 ├── SPECS.md              # 📐 Comprehensive system and architectural specs
 ├── README.md             # 🌟 Showcase documentation for portfolios
-├── .gitignore            # 🛡️ Git exclusion definitions
-└── uv.lock               # 🔒 Deterministic dependency lockfile
+└── .gitignore            # 🛡️ Git exclusion definitions
 ```
 
 ---
