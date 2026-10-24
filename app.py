@@ -17,96 +17,360 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Clean, modern, and accessible CSS styling
+# Clean, modern, accessible, and high-contrast CSS styling
 FRIENDLY_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+/* Global Font & Text Visibility */
+html, body, [class*="css"], .stApp {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
 
 /* Background */
 .stApp {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #f8fafc;
+    background: linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e293b 100%) !important;
+    color: #f8fafc !important;
 }
 
-/* Main Title */
+/* High Contrast Headings across all elements */
+h1, h2, h3, h4, h5, h6,
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3,
+[data-testid="stMarkdownContainer"] h4 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em;
+}
+
+/* High Contrast Paragraphs & Labels */
+p, span, label,
+[data-testid="stMarkdownContainer"] p {
+    color: #f1f5f9 !important;
+    line-height: 1.5;
+}
+
+/* Main Titles */
 .main-title {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 800;
     text-align: center;
-    color: #38bdf8;
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 0.2rem;
 }
 
 .main-subtitle {
     text-align: center;
-    font-size: 1rem;
-    color: #94a3b8;
+    font-size: 1.05rem;
+    color: #cbd5e1 !important;
     margin-bottom: 1.5rem;
+    font-weight: 500;
 }
 
-/* Friendly Card */
-.game-card {
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* Metric Cards Styling */
+[data-testid="stMetric"] {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 14px !important;
+    padding: 0.7rem 1.1rem !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-testid="stMetricLabel"] * {
+    color: #cbd5e1 !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stMetricValue"] * {
+    color: #38bdf8 !important;
+    font-size: 1.8rem !important;
+    font-weight: 800 !important;
+}
+
+/* Dropdown / Selectbox Styling */
+[data-testid="stSelectbox"] label p {
+    color: #ffffff !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stSelectbox"] div[data-baseweb="select"] {
+    background-color: #1e293b !important;
+    border-color: #475569 !important;
+    border-radius: 10px !important;
+}
+
+[data-testid="stSelectbox"] div[data-baseweb="select"] * {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+/* Word Box & Modern Letter Tiles */
+.word-card {
+    background: #111827;
+    border: 1px solid rgba(56, 189, 248, 0.3);
     border-radius: 16px;
     padding: 1.5rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    margin-bottom: 1.2rem;
+}
+
+.word-tiles-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 1.2rem 0;
+}
+
+.letter-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 56px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.1rem;
+    font-weight: 800;
+    border-radius: 10px;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.letter-tile.revealed {
+    background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+    border: 2px solid #38bdf8;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+}
+
+.letter-tile.blank {
+    background: #090e17;
+    border: 2px dashed #475569;
+    border-bottom: 4px solid #38bdf8;
+    color: transparent;
+}
+
+.letter-tile.missed {
+    background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%);
+    color: #fca5a5;
+    border: 2px solid #ef4444;
+}
+
+.word-info-footer {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-top: 10px;
+}
+
+/* Hangman Drawing & Gallows Display */
+.hangman-card {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     margin-bottom: 1rem;
 }
 
-/* Word Box */
-.word-box {
-    background: #090d16;
-    border: 2px solid #38bdf8;
-    border-radius: 14px;
-    padding: 1.4rem;
-    text-align: center;
-    margin: 1rem 0;
-}
-
-.word-letters {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 2.4rem;
-    font-weight: 800;
-    letter-spacing: 0.6rem;
-    color: #ffffff;
-}
-
-/* Hangman Drawing Display */
 .hangman-drawing {
-    background: #090d16;
-    border: 1px solid #334155;
+    background: #070b12;
+    border: 1px solid #1e293b;
     border-radius: 12px;
     padding: 1.2rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1rem;
-    line-height: 1.3;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.35;
     color: #38bdf8;
     white-space: pre;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Lives / Hearts Bar */
-.lives-display {
+/* Lives / Hearts Badge */
+.lives-badge {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.lives-hearts {
     font-size: 1.4rem;
-    text-align: center;
-    margin-bottom: 0.5rem;
+    letter-spacing: 5px;
+    margin-bottom: 4px;
 }
 
-/* Button styling */
-.stButton>button {
-    border-radius: 10px;
+.lives-text {
+    font-size: 0.92rem;
     font-weight: 700;
-    transition: all 0.2s ease-in-out;
+    color: #f8fafc;
+    letter-spacing: 0.5px;
 }
 
-.stButton>button:hover {
+/* Virtual Keyboard Buttons */
+div[data-testid="stHorizontalBlock"] .stButton > button {
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 2px !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    background: #1e293b !important;
+    color: #ffffff !important;
+    border: 1px solid #475569 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) !important;
+    transition: all 0.15s ease-in-out !important;
+}
+
+div[data-testid="stHorizontalBlock"] .stButton > button:hover:not(:disabled) {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    border-color: #38bdf8 !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.45) !important;
+}
+
+/* Correct Guess Key (Green Accent) */
+div[data-testid="stHorizontalBlock"] .stButton > button[data-testid="baseButton-primary"]:disabled,
+div[data-testid="stHorizontalBlock"] .stButton > button[kind="primary"]:disabled {
+    background: #064e3b !important;
+    border-color: #10b981 !important;
+    color: #6ee7b7 !important;
+    opacity: 0.95 !important;
+    font-weight: 800 !important;
+}
+
+/* Wrong Guess Key (Red Accent) */
+div[data-testid="stHorizontalBlock"] .stButton > button[data-testid="baseButton-secondary"]:disabled,
+div[data-testid="stHorizontalBlock"] .stButton > button[kind="secondary"]:disabled {
+    background: #2a1215 !important;
+    border-color: #7f1d1d !important;
+    color: #f87171 !important;
+    opacity: 0.85 !important;
+    font-weight: 700 !important;
+}
+
+/* Primary Game Action Button (Restart) */
+.main-game-actions .stButton > button,
+button[kind="primary"]:not(:disabled) {
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    padding: 0.75rem 1.5rem !important;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35) !important;
+}
+
+button[kind="primary"]:not(:disabled):hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.45) !important;
+}
+
+/* Sidebar Styling */
+[data-testid="stSidebar"] {
+    background-color: #0b1120 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stSidebarContent"] {
+    background-color: #0b1120 !important;
+}
+
+[data-testid="stSidebar"] h1, 
+[data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3 {
+    color: #38bdf8 !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stSidebar"] p, 
+[data-testid="stSidebar"] span, 
+[data-testid="stSidebar"] label {
+    color: #e2e8f0 !important;
+}
+
+[data-testid="stSidebar"] .stCaption {
+    color: #cbd5e1 !important;
+    font-size: 0.9rem !important;
+}
+
+/* Sidebar Action Buttons */
+[data-testid="stSidebar"] .stButton > button {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+    border-radius: 10px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    height: 42px !important;
+}
+
+[data-testid="stSidebar"] .stButton > button:hover {
+    background: #38bdf8 !important;
+    color: #0f172a !important;
+    border-color: #38bdf8 !important;
+    font-weight: 700 !important;
+}
+
+/* Chat Messages */
+[data-testid="stChatMessage"] {
+    background: rgba(30, 41, 59, 0.75) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 0.85rem 1rem !important;
+    margin-bottom: 0.6rem !important;
+}
+
+[data-testid="stChatMessage"] p {
+    color: #f1f5f9 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+}
+
+[data-testid="stChatMessage"] strong, 
+[data-testid="stChatMessage"] b {
+    color: #38bdf8 !important;
+}
+
+/* Chat Input */
+[data-testid="stChatInput"] {
+    border-color: #334155 !important;
+}
+
+[data-testid="stChatInput"] textarea {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+    font-size: 0.95rem !important;
+    border-radius: 10px !important;
+}
+
+[data-testid="stChatInput"] textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+/* Alert Notification Badges */
+[data-testid="stAlert"] {
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stAlert"] * {
+    color: #ffffff !important;
 }
 </style>
 """
@@ -134,69 +398,62 @@ CATEGORIES = {
 
 # Classic, easy-to-see Hangman Stages (0 to 6 wrong guesses)
 CLASSIC_HANGMAN_STAGES = [
-    """
-       +---+
-       |   |
-           |
-           |
-           |
-           |
-    =========
-    """,
-    """
-       +---+
-       |   |
-       O   |
-           |
-           |
-           |
-    =========
-    """,
-    """
-       +---+
-       |   |
-       O   |
-       |   |
-           |
-           |
-    =========
-    """,
-    """
-       +---+
-       |   |
-       O   |
-      /|   |
-           |
-           |
-    =========
-    """,
-    """
-       +---+
-       |   |
-       O   |
-      /|\\  |
-           |
-           |
-    =========
-    """,
-    """
-       +---+
-       |   |
-       O   |
-      /|\\  |
-      /    |
-           |
-    =========
-    """,
-    """
-       +---+
-       |   |
-       O   |
-      /|\\  |
-      / \\  |
-           |
-    =========
-    """
+    r"""
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========""",
+    r"""
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========""",
+    r"""
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========""",
+    r"""
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========""",
+    r"""
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========""",
+    r"""
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========""",
+    r"""
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+========="""
 ]
 
 # Initialize AI Assistant
@@ -235,10 +492,6 @@ def start_new_game(category: str = None):
 
 if "word" not in st.session_state:
     start_new_game()
-
-def get_display_word() -> str:
-    """Shows letters guessed and underscores for remaining letters."""
-    return " ".join([ch if ch in st.session_state.guessed else "_" for ch in st.session_state.word])
 
 def check_win() -> bool:
     """Returns True if player guessed all letters."""
@@ -349,9 +602,9 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("""
-        <div style="text-align:center; font-size:0.85rem; color:#94a3b8;">
-            Made by <b>Sain Bux (Hadi Seelro)</b><br/>
-            ⭐ <i>Agentic AI & Python Developer</i>
+        <div style="text-align:center; padding: 0.5rem 0;">
+            <div style="font-size:0.95rem; font-weight:700; color:#38bdf8;">Sain Bux (Hadi Seelro)</div>
+            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:2px;">⭐ Agentic AI & Python Developer</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -391,22 +644,40 @@ with left_col:
     
     # Display Hearts for lives left
     hearts = "❤️ " * st.session_state.tries + "🖤 " * (6 - st.session_state.tries)
-    st.markdown(f'<div class="lives-display">Lives: {hearts}</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+        <div class="lives-badge">
+            <div class="lives-hearts">{hearts}</div>
+            <div class="lives-text">{st.session_state.tries} of 6 Chances Remaining</div>
+        </div>
+    """, unsafe_allow_html=True)
     
     # Classic ASCII Hangman Drawing
     stage_idx = 6 - st.session_state.tries
-    st.markdown(f'<div class="hangman-drawing">{CLASSIC_HANGMAN_STAGES[stage_idx]}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="hangman-card"><div class="hangman-drawing">{CLASSIC_HANGMAN_STAGES[stage_idx]}</div></div>', 
+        unsafe_allow_html=True
+    )
 
 with right_col:
     st.markdown("### 🔤 Secret Word")
     
-    # Secret Word Blanks
-    word_text = get_display_word()
+    # Render modern visual letter tiles
+    letter_tiles = []
+    for ch in st.session_state.word:
+        if ch in st.session_state.guessed:
+            letter_tiles.append(f'<span class="letter-tile revealed">{ch}</span>')
+        elif st.session_state.status == "lost":
+            letter_tiles.append(f'<span class="letter-tile missed">{ch}</span>')
+        else:
+            letter_tiles.append('<span class="letter-tile blank">&nbsp;</span>')
+    tiles_markup = " ".join(letter_tiles)
+
     st.markdown(f"""
-        <div class="word-box">
-            <div class="word-letters">{word_text}</div>
-            <div style="font-size:0.9rem; color:#94a3b8; margin-top:8px;">
-                Category: <b>{st.session_state.selected_category}</b> • {len(st.session_state.word)} Letters
+        <div class="word-card">
+            <div class="word-tiles-container">{tiles_markup}</div>
+            <div class="word-info-footer">
+                Category: <strong style="color: #38bdf8;">{st.session_state.selected_category}</strong> • 
+                <strong style="color: #ffffff;">{len(st.session_state.word)} Letters</strong>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -426,12 +697,12 @@ with right_col:
     # Win / Loss Result Announcements
     if st.session_state.status == "won":
         st.balloons()
-        st.success(f"🎉 **CONGRATULATIONS, YOU WON!** The word was **{st.session_state.word}**!")
+        st.success(f"🎉 **CONGRATULATIONS, YOU WON!** You guessed **{st.session_state.word}**! Streak: **{st.session_state.stats['streak']}** 🔥")
     elif st.session_state.status == "lost":
-        st.error(f"😢 **GAME OVER!** The word was **{st.session_state.word}**.")
+        st.error(f"😢 **GAME OVER!** The secret word was **{st.session_state.word}**. Click 'Play Again' to retry!")
 
     # Virtual Keyboard (A - Z)
-    st.markdown("**Click a letter to guess:**")
+    st.markdown("##### ⌨️ Click a letter to guess:")
     
     keyboard_layout = [
         list("QWERTYUIOP"),
@@ -449,23 +720,29 @@ with right_col:
                 
                 if is_correct:
                     label = f"✓ {key_letter}"
+                    btn_type = "primary"
                 elif is_wrong:
                     label = f"✗ {key_letter}"
+                    btn_type = "secondary"
                 else:
                     label = key_letter
+                    btn_type = "secondary"
                 
                 if st.button(
                     label,
                     key=f"k_{key_letter}",
+                    type=btn_type,
                     disabled=is_guessed or (st.session_state.status != "playing"),
                     use_container_width=True
                 ):
                     make_guess(key_letter)
                     st.rerun()
 
-    st.markdown("<br/>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 1.2rem;' class='main-game-actions'>", unsafe_allow_html=True)
     
     # Restart Button
     if st.button("🔄 Play Again / New Word", type="primary", use_container_width=True):
         start_new_game()
         st.rerun()
+
+    st.markdown("</div>", unsafe_allow_html=True)
