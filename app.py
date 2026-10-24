@@ -309,18 +309,108 @@ button[kind="primary"]:not(:disabled):hover {
     font-size: 0.9rem !important;
 }
 
-/* Sidebar Action Buttons */
+/* Sidebar Quick Open Button */
 [data-testid="stSidebar"] .stButton > button {
     background: #1e293b !important;
     color: #f8fafc !important;
     border: 1px solid #334155 !important;
     border-radius: 10px !important;
-    font-size: 0.9rem !important;
-    font-weight: 600 !important;
-    height: 42px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
 }
 
 [data-testid="stSidebar"] .stButton > button:hover {
+    background: #38bdf8 !important;
+    color: #0f172a !important;
+    border-color: #38bdf8 !important;
+}
+
+/* ======================================================== */
+/* 🌐 WEBSITE-STYLE FLOATING CORNER CHATBOT WIDGET STYLING   */
+/* ======================================================== */
+
+/* 1. Floating Launcher Button (Bottom-Right Corner) */
+div[class*="st-key-chat_launcher_container"] {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    z-index: 999999 !important;
+}
+
+div[class*="st-key-chat_launcher_container"] .stButton > button {
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
+    color: #ffffff !important;
+    border: 2px solid #38bdf8 !important;
+    border-radius: 50px !important;
+    padding: 12px 24px !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    box-shadow: 0 10px 25px rgba(2, 132, 199, 0.55), 0 0 16px rgba(56, 189, 248, 0.4) !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease-in-out !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+div[class*="st-key-chat_launcher_container"] .stButton > button:hover {
+    transform: translateY(-3px) scale(1.04) !important;
+    box-shadow: 0 14px 32px rgba(56, 189, 248, 0.65) !important;
+}
+
+/* 2. Floating Chat Window (Docked in Bottom-Right Corner) */
+div[class*="st-key-chat_widget_container"] {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 395px !important;
+    max-width: calc(100vw - 32px) !important;
+    background: #0f172a !important;
+    border: 1px solid rgba(56, 189, 248, 0.4) !important;
+    border-radius: 20px !important;
+    padding: 1.1rem !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 25px rgba(56, 189, 248, 0.25) !important;
+    z-index: 999999 !important;
+    backdrop-filter: blur(16px) !important;
+}
+
+/* Close/Minimize Button */
+div[class*="st-key-close_chat_btn"] > button {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50% !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+    color: #94a3b8 !important;
+    font-size: 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-left: auto !important;
+}
+
+div[class*="st-key-close_chat_btn"] > button:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+    color: #ef4444 !important;
+    border-color: #ef4444 !important;
+}
+
+/* Quick Action Buttons inside Corner Chatbot */
+div[class*="st-key-chat_widget_container"] .stButton > button {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+    border-radius: 8px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 2px !important;
+}
+
+div[class*="st-key-chat_widget_container"] .stButton > button:hover {
     background: #38bdf8 !important;
     color: #0f172a !important;
     border-color: #38bdf8 !important;
@@ -463,6 +553,10 @@ if "agent_instance" not in st.session_state:
         contact_email="contact.sainbux@gmail.com"
     )
 
+# Initialize Chatbot Widget State (Collapsed by default, opens in bottom-right corner)
+if "chat_open" not in st.session_state:
+    st.session_state.chat_open = False
+
 # Initialize Session State
 if "selected_category" not in st.session_state:
     st.session_state.selected_category = "💻 Tech & AI"
@@ -537,68 +631,36 @@ def make_guess(letter: str):
             })
 
 
-# ================== SIDEBAR: FRIENDLY AI HELPER ==================
+# ================== SIDEBAR: GAME GUIDE & STATS ==================
 with st.sidebar:
-    st.markdown("### 🤖 Friendly AI Helper (NEXUS)")
-    st.caption("Ask for easy hints or learn about the developer!")
-
-    # 4 Quick Action Buttons
-    col_s1, col_s2 = st.columns(2)
-    with col_s1:
-        if st.button("💡 Get a Hint", use_container_width=True):
-            ctx = {
-                "word": st.session_state.word,
-                "guessed": st.session_state.guessed,
-                "tries": st.session_state.tries,
-                "status": st.session_state.status
-            }
-            hint_txt = st.session_state.agent_instance.process_message("hint", ctx)
-            st.session_state.chat_history.append({"role": "user", "content": "Can you give me a hint?"})
-            st.session_state.chat_history.append({"role": "assistant", "content": hint_txt})
-            st.rerun()
-
-    with col_s2:
-        if st.button("🎮 How to Play", use_container_width=True):
-            rules_txt = st.session_state.agent_instance.process_message("how to play")
-            st.session_state.chat_history.append({"role": "user", "content": "How do I play this game?"})
-            st.session_state.chat_history.append({"role": "assistant", "content": rules_txt})
-            st.rerun()
-
-    col_s3, col_s4 = st.columns(2)
-    with col_s3:
-        if st.button("👨‍💻 Developer", use_container_width=True):
-            dev_txt = st.session_state.agent_instance.process_message("developer")
-            st.session_state.chat_history.append({"role": "user", "content": "Who built this app?"})
-            st.session_state.chat_history.append({"role": "assistant", "content": dev_txt})
-            st.rerun()
-
-    with col_s4:
-        if st.button("🧹 Clear Chat", use_container_width=True):
-            st.session_state.chat_history = [
-                {"role": "assistant", "content": st.session_state.agent_instance.get_greeting()}
-            ]
-            st.rerun()
-
-    # Chat Conversation Area
-    chat_box = st.container(height=360)
-    with chat_box:
-        for msg in st.session_state.chat_history:
-            with st.chat_message(msg["role"]):
-                st.markdown(msg["content"])
-
-    # Chat Input
-    user_input = st.chat_input("Ask a question or ask for a hint...")
-    if user_input:
-        st.session_state.chat_history.append({"role": "user", "content": user_input})
-        ctx = {
-            "word": st.session_state.word,
-            "guessed": st.session_state.guessed,
-            "tries": st.session_state.tries,
-            "status": st.session_state.status
-        }
-        reply = st.session_state.agent_instance.process_message(user_input, ctx)
-        st.session_state.chat_history.append({"role": "assistant", "content": reply})
+    st.markdown("### 🎯 Hangman Portal")
+    st.caption("Clean, distraction-free gameplay with 24/7 AI assistance.")
+    
+    # Quick launcher for corner AI Helper
+    if st.button("💬 Open AI Chatbot", use_container_width=True):
+        st.session_state.chat_open = True
         st.rerun()
+
+    st.markdown("---")
+    st.markdown("#### 📖 How to Play")
+    st.markdown("""
+    1. **Choose a category** from the top menu.
+    2. **Click letters** on the virtual keyboard to guess.
+    3. Correct letters appear in the secret word tiles.
+    4. You have **6 chances** before the hangman is complete!
+    5. Need a clue? Click the **floating AI bot in the corner**!
+    """)
+
+    st.markdown("---")
+    st.markdown("#### 🏆 Quick Stats")
+    win_pct = (
+        int((st.session_state.stats["won"] / st.session_state.stats["played"]) * 100)
+        if st.session_state.stats["played"] > 0
+        else 0
+    )
+    st.markdown(f"• **Win Rate**: `{win_pct}%`")
+    st.markdown(f"• **Current Streak**: `{st.session_state.stats['streak']} 🔥`")
+    st.markdown(f"• **Total Solved**: `{st.session_state.stats['won']}` of `{st.session_state.stats['played']}`")
 
     st.markdown("---")
     st.markdown("""
@@ -746,3 +808,88 @@ with right_col:
         st.rerun()
 
     st.markdown("</div>", unsafe_allow_html=True)
+
+
+# ==============================================================================
+# 🌐 FLOATING WEBSITE-STYLE CORNER CHATBOT WIDGET (DOCK IN BOTTOM-RIGHT CORNER)
+# ==============================================================================
+
+if not st.session_state.chat_open:
+    # Collapsed State: Floating launcher button in the bottom-right corner
+    with st.container(key="chat_launcher_container"):
+        if st.button("💬 🤖 AI Helper", key="btn_open_floating_chat"):
+            st.session_state.chat_open = True
+            st.rerun()
+
+else:
+    # Expanded State: Floating interactive chat widget docked in the bottom-right corner
+    with st.container(key="chat_widget_container"):
+        # Header with Title & Close/Minimize Button
+        hc1, hc2 = st.columns([5, 1])
+        with hc1:
+            st.markdown("<h4 style='margin:0; padding:0; color:#38bdf8;'>🤖 NEXUS AI Helper</h4>", unsafe_allow_html=True)
+            st.caption("Ask for clues, rules, or developer info!")
+        with hc2:
+            if st.button("✖", key="close_chat_btn", help="Minimize Chat"):
+                st.session_state.chat_open = False
+                st.rerun()
+
+        st.markdown("<hr style='margin: 0.4rem 0 0.8rem 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);'>", unsafe_allow_html=True)
+
+        # 4 Quick Action Buttons
+        qc1, qc2 = st.columns(2)
+        with qc1:
+            if st.button("💡 Get Hint", key="cw_hint", use_container_width=True):
+                ctx = {
+                    "word": st.session_state.word,
+                    "guessed": st.session_state.guessed,
+                    "tries": st.session_state.tries,
+                    "status": st.session_state.status
+                }
+                hint_txt = st.session_state.agent_instance.process_message("hint", ctx)
+                st.session_state.chat_history.append({"role": "user", "content": "Can you give me a hint?"})
+                st.session_state.chat_history.append({"role": "assistant", "content": hint_txt})
+                st.rerun()
+
+        with qc2:
+            if st.button("🎮 How to Play", key="cw_rules", use_container_width=True):
+                rules_txt = st.session_state.agent_instance.process_message("how to play")
+                st.session_state.chat_history.append({"role": "user", "content": "How do I play this game?"})
+                st.session_state.chat_history.append({"role": "assistant", "content": rules_txt})
+                st.rerun()
+
+        qc3, qc4 = st.columns(2)
+        with qc3:
+            if st.button("👨‍💻 Developer", key="cw_dev", use_container_width=True):
+                dev_txt = st.session_state.agent_instance.process_message("developer")
+                st.session_state.chat_history.append({"role": "user", "content": "Who built this app?"})
+                st.session_state.chat_history.append({"role": "assistant", "content": dev_txt})
+                st.rerun()
+
+        with qc4:
+            if st.button("🧹 Clear Chat", key="cw_clear", use_container_width=True):
+                st.session_state.chat_history = [
+                    {"role": "assistant", "content": st.session_state.agent_instance.get_greeting()}
+                ]
+                st.rerun()
+
+        # Chat Conversation Area
+        chat_scroll_box = st.container(height=260)
+        with chat_scroll_box:
+            for msg in st.session_state.chat_history:
+                with st.chat_message(msg["role"]):
+                    st.markdown(msg["content"])
+
+        # Chat Input
+        corner_input = st.chat_input("Ask a hint or question...", key="cw_chat_input")
+        if corner_input:
+            st.session_state.chat_history.append({"role": "user", "content": corner_input})
+            ctx = {
+                "word": st.session_state.word,
+                "guessed": st.session_state.guessed,
+                "tries": st.session_state.tries,
+                "status": st.session_state.status
+            }
+            reply = st.session_state.agent_instance.process_message(corner_input, ctx)
+            st.session_state.chat_history.append({"role": "assistant", "content": reply})
+            st.rerun()
