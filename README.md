@@ -4,21 +4,31 @@
 ### *Simple, Fun, and Powered by an Embedded AI Helper*
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
-[![Status](https://img.shields.io/badge/Status-Live-00ff66?style=for-the-badge)](https://github.com/SainBux-HadiSeelro/Agentic-Hangman-2.0)
+[![Streamlit App](https://img.shields.io/badge/Streamlit-Live%20App-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://agentic-hangman.streamlit.app/)
+[![Live Demo](https://img.shields.io/badge/Demo-agentic--hangman.streamlit.app-00ff66?style=for-the-badge&logo=google-chrome&logoColor=white)](https://agentic-hangman.streamlit.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 <p align="center">
   <b>Architected by Sain Bux (Hadi Seelro) • Agentic AI & Full-Stack Python Engineer</b>
 </p>
 
-[🎮 How to Play](#-how-to-play) • [🤖 Friendly AI Helper](#-meet-nexus-ai) • [🚀 Quick Start](#-quick-start) • [💼 Contact Developer](#-about-the-developer)
+<p align="center">
+  <a href="https://agentic-hangman.streamlit.app/" target="_blank">
+    <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Open in Streamlit" height="38">
+  </a>
+  <br>
+  <b>🚀 <a href="https://agentic-hangman.streamlit.app/" target="_blank">Click Here to Play the Live Game in Your Browser</a> 🚀</b>
+</p>
+
+[🌐 Live Demo](https://agentic-hangman.streamlit.app/) • [🎮 How to Play](#-how-to-play) • [🤖 Friendly AI Helper](#-meet-nexus-ai) • [🚀 Quick Start](#-quick-start) • [💼 Contact Developer](#-about-the-developer)
 
 ---
 
 </div>
 
 ## 🌟 About the Project
+
+> 🌐 **Live Web Demo:** [https://agentic-hangman.streamlit.app/](https://agentic-hangman.streamlit.app/) — *No installation needed! Play directly in your browser on mobile, tablet, or desktop.*
 
 **Hangman: Modern AI Edition** is a clean, accessible, and fun word-guessing web application built with **Python & Streamlit**. It is designed so that **anyone**—from casual gamers to tech recruiters—can immediately play, have fun, and interact with an integrated **AI Assistant (NEXUS AI)**.
 
@@ -100,6 +110,7 @@ Agentic-Hangman-2.0/
 
 Crafted with care by **Sain Bux (Hadi Seelro)** — **Agentic AI & Full-Stack Python Engineer**.
 
+- 🌐 **Live Demo**: [agentic-hangman.streamlit.app](https://agentic-hangman.streamlit.app/)
 - 📧 **Email**: `contact.sainbux@gmail.com`
 - 🐙 **GitHub**: [@SainBux-HadiSeelro](https://github.com/SainBux-HadiSeelro)
 - 📂 **Repository**: [Agentic-Hangman-2.0](https://github.com/SainBux-HadiSeelro/Agentic-Hangman-2.0)
