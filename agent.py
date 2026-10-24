@@ -1,197 +1,162 @@
 """
-NEXUS-7: Autonomous 24/7 AI Customer Support & Game Mentor Agent
-Engineered for Hangman Cyberpunk Edition.
-Provides portfolio intelligence, real-time customer care, and game strategy.
+NEXUS AI: Friendly 24/7 AI Helper & Portfolio Assistant
+Designed for Hangman Game. Simple, warm, and easy for everyone to understand.
 """
 
-import os
-import re
-import random
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 class NexusAgent:
     """
-    Autonomous 24/7 AI Agent that manages:
-    1. Customer & Portfolio Visitor queries (skills, contact, hiring, tech stack).
-    2. Real-time contextual game hints and AI terminology definitions.
-    3. Seamless offline intelligent response engine + optional external LLM support.
+    Friendly AI Assistant that:
+    1. Helps players with simple, easy-to-understand game hints.
+    2. Answers questions about the developer (Sain Bux - Hadi Seelro).
+    3. Explains how to play the game in plain English and Roman Urdu.
     """
 
     def __init__(self, developer_name: str = "Sain Bux (Hadi Seelro)", contact_email: str = "contact.sainbux@gmail.com"):
         self.developer_name = developer_name
         self.contact_email = contact_email
-        self.agent_name = "NEXUS-7"
-        self.version = "v2.5.0-Cyber"
+        self.agent_name = "NEXUS AI"
 
-        # Developer Portfolio & Knowledge Base
-        self.portfolio_data = {
-            "developer": self.developer_name,
-            "role": "Autonomous Agentic AI & Full-Stack Python Engineer",
-            "github": "https://github.com/SainBux-HadiSeelro",
-            "repo": "https://github.com/SainBux-HadiSeelro/Agentic-Hangman-2.0",
-            "skills": [
-                "Agentic AI Workflows & Autonomous Multi-Agent Systems",
-                "Large Language Models (Gemini, Claude, GPT-4, Llama)",
-                "Full-Stack Python, Streamlit, FastAPI, LangChain, LlamaIndex",
-                "RAG (Retrieval-Augmented Generation) & Vector Databases",
-                "Modern Glassmorphism & Cyberpunk UI/UX Engineering"
-            ],
-            "services": [
-                "Custom AI Agent & Chatbot Development (24/7 Autonomous)",
-                "Enterprise Workflow Automation & Multi-Agent Swarms",
-                "Full-Stack Interactive Web Applications",
-                "AI Strategy & Model Fine-Tuning Consultation"
-            ],
-            "hire_status": "Available for high-impact Freelance, Contract, and Full-time Engineering roles."
-        }
+        # Simple and helpful clues for words
+        self.simple_hints = {
+            # Tech & AI
+            "PYTHON": "A very popular and friendly programming language named after a snake!",
+            "ROBOT": "A machine that can do tasks automatically or be controlled by AI.",
+            "COMPUTER": "An electronic device we use every day for work, games, and internet.",
+            "INTERNET": "The global network that connects everyone around the world.",
+            "CHATBOT": "A computer program (like me!) designed to chat with people.",
+            "LAPTOP": "A portable personal computer you can carry in a bag.",
+            "CODING": "Writing instructions that tell computers what to do.",
+            "SMARTPHONE": "The touchscreen phone in your pocket used for calls and apps.",
+            
+            # Animals
+            "ELEPHANT": "The largest land animal on Earth with big ears and a long trunk!",
+            "DOLPHIN": "A super smart and playful sea animal that loves jumping in the ocean.",
+            "TIGER": "A big, powerful wild cat with beautiful orange and black stripes.",
+            "GIRAFFE": "The tallest living animal in the world with a very long neck.",
+            "PENGUIN": "A cute black-and-white bird that cannot fly but swims amazingly in cold ice.",
+            "KANGAROO": "An Australian animal that carries its baby in a pouch and hops around.",
+            "LION": "Known as the King of the Jungle with a majestic mane.",
+            "MONKEY": "A playful animal that loves climbing trees and eating bananas.",
 
-        # Knowledge Base for Tech & AI Words with educational hints
-        self.word_hints = {
-            "AUTONOMOUS": "Self-governing entities that perceive their environment and take actions independently.",
-            "REASONING": "The cognitive capability of AI models (like chain-of-thought) to deduce conclusions.",
-            "PROMPT": "The instruction or context provided to an AI model to guide its output generation.",
-            "EMBEDDING": "High-dimensional vector representations capturing semantic meaning of text or media.",
-            "FINE_TUNING": "Adapting a pre-trained foundation model on a domain-specific dataset.",
-            "AGENT": "A software entity equipped with sensors, tools, and actuators to execute tasks autonomously.",
-            "LANGCHAIN": "A popular open-source framework designed for building applications powered by LLMs.",
-            "TRANSFORMER": "The groundbreaking neural network architecture introduced in 'Attention Is All You Need'.",
-            "WORKFLOW": "A structured sequence of computational or agentic tasks orchestrated to solve problems.",
-            "MULTIMODAL": "AI architectures capable of processing text, audio, images, and video simultaneously.",
-            "STREAMLIT": "The rapid open-source Python framework used to build and deploy this very application!",
-            "ASYNCHRONOUS": "Non-blocking execution architecture enabling high-throughput I/O operations.",
-            "ALGORITHM": "A finite sequence of rigorous instructions designed to solve a specific class of problems.",
-            "FRAMEWORK": "A standardized, reusable software platform facilitating rapid application development.",
-            "CONTAINER": "Lightweight, standalone executable software package (like Docker) bundling all code and dependencies.",
-            "DECORATOR": "A Python design pattern that alters or enhances functions dynamically without modifying them.",
-            "GENERATOR": "A Python memory-efficient iterator function that yields values on-demand using 'yield'.",
-            "BYTECODE": "Intermediate low-level instruction set executed by the Python Virtual Machine (PVM).",
-            "QUANTUM": "Computation paradigms utilizing superposition and entanglement for exponential speedups.",
-            "CYBERNETICS": "The science of communications and automatic control systems in both machines and living things.",
-            "NEURAL_NET": "Interconnected layers of synthetic artificial neurons modeled loosely after biological brains.",
-            "METAVERSE": "Interconnected immersive 3D digital environments simulating physical presence."
+            # Countries
+            "PAKISTAN": "A beautiful country in South Asia with majestic mountains like K2.",
+            "TURKEY": "A historic country connecting Asia and Europe, famous for Istanbul.",
+            "JAPAN": "The land of the rising sun, famous for Tokyo, cherry blossoms, and anime.",
+            "CANADA": "A large country in North America famous for maple syrup and cold winters.",
+            "BRAZIL": "The largest country in South America, famous for football and Amazon rainforest.",
+            "GERMANY": "A European country known for engineering, fast cars, and castles.",
+            "EGYPT": "An ancient land in Africa famous for the Great Pyramids and the Nile river.",
+            "FRANCE": "A romantic European country famous for the Eiffel Tower and delicious pastries.",
+
+            # Movies & Fun
+            "AVATAR": "A famous sci-fi movie set on the blue alien planet of Pandora.",
+            "TITANIC": "A legendary romance movie about the famous ship that hit an iceberg.",
+            "INCEPTION": "A mind-bending movie about dreams within dreams starring Leonardo DiCaprio.",
+            "GLADIATOR": "An epic action movie about a Roman general who fights in the Colosseum.",
+            "FROZEN": "A Disney animated movie with Queen Elsa and the song 'Let It Go'!",
+            "BATMAN": "The superhero vigilante who protects Gotham City at night.",
+            "SPIDERMAN": "A friendly neighborhood superhero who climbs walls and shoots webs."
         }
 
     def get_greeting(self) -> str:
-        """Initial welcome greeting for visitors and players."""
+        """Friendly welcome message for any visitor."""
         return (
-            f"⚡ **Greetings, Operative!** I am **{self.agent_name}**, the 24/7 Autonomous Resident AI for this terminal.\n\n"
-            f"I was architected by **{self.developer_name}** to assist you with:\n"
-            f"• 🎮 **Real-time game hints & AI definitions**\n"
-            f"• 💼 **Developer portfolio, tech stack & hiring info**\n"
-            f"• 🛠️ **System architecture & technical specifications**\n\n"
-            f"What would you like to explore?"
+            f"👋 **Hi there! I am {self.agent_name}**, your friendly game buddy!\n\n"
+            f"I was created by **{self.developer_name}** to help you:\n"
+            f"• 💡 **Get easy hints** if you are stuck\n"
+            f"• 🎮 **Learn how to play** the game\n"
+            f"• 👨‍💻 **Learn about the developer** & how to hire him\n\n"
+            f"Feel free to ask me anything or click one of the buttons above!"
         )
 
     def generate_hint(self, secret_word: str, guessed_letters: List[str], tries_left: int) -> str:
-        """
-        Generates a strategic, contextual hint without giving the word away.
-        """
+        """Returns a simple, easy-to-understand clue."""
         word_upper = secret_word.upper()
         
-        # 1. Check if word definition is in our knowledge base
-        hint_def = self.word_hints.get(word_upper)
+        # 1. Check if we have an easy clue
+        clue = self.simple_hints.get(word_upper)
+        vowels = [ch for ch in "AEIOU" if ch in word_upper and ch not in guessed_letters]
         
-        # 2. Find unguessed vowels and consonants
-        vowels = set("AEIOU")
-        unguessed_vowels = [ch for ch in word_upper if ch in vowels and ch.lower() not in guessed_letters]
-        unguessed_consonants = [ch for ch in word_upper if ch not in vowels and ch.lower() not in guessed_letters]
-
         parts = []
-        if hint_def:
-            parts.append(f"🔍 **Concept Clue**: *\"{hint_def}\"*")
+        if clue:
+            parts.append(f"💡 **Clue**: *{clue}*")
         else:
-            parts.append(f"🔍 **Length**: The target sequence is **{len(secret_word)} letters** long.")
+            parts.append(f"💡 **Word Length**: This word has **{len(secret_word)} letters**.")
 
-        if tries_left <= 2 and unguessed_vowels:
-            parts.append(f"💡 **Emergency Core Tip**: There is at least one unguessed vowel remaining!")
-        elif unguessed_consonants:
-            sample_char = random.choice(unguessed_consonants)
-            # Give frequency hint or position hint
-            count = word_upper.count(sample_char)
-            parts.append(f"💡 **Signal Intercept**: The letter frequency scan suggests considering **high-entropy consonants**.")
+        if tries_left <= 2 and vowels:
+            parts.append(f"✨ **Bonus Tip**: Try guessing a vowel like **'{vowels[0]}'**!")
+        elif tries_left <= 3:
+            unguessed = [ch for ch in word_upper if ch not in guessed_letters]
+            if unguessed:
+                parts.append("✨ **Tip**: Look at the letters you haven't tried yet!")
 
         return "\n\n".join(parts)
 
     def process_message(self, user_message: str, game_context: Optional[Dict] = None) -> str:
-        """
-        Intelligent, 24/7 autonomous response engine with natural language intent recognition.
-        """
+        """Friendly, easy-to-understand response engine."""
         msg = user_message.strip().lower()
-        
-        # 1. Check for Game Hint Request
-        if any(w in msg for w in ["hint", "clue", "help with word", "help me guess", "give me a hint", "stuck"]):
+
+        # 1. Hint requests
+        if any(w in msg for w in ["hint", "clue", "help", "stuck", "btao", "madad"]):
             if game_context and "word" in game_context:
                 word = game_context.get("word", "")
                 guessed = game_context.get("guessed", [])
                 tries = game_context.get("tries", 6)
                 status = game_context.get("status", "playing")
-                
+
                 if status == "won":
-                    return f"🎉 You've already decrypted the sequence **{word.upper()}**! Hit **Play Again** for a new challenge."
+                    return f"🎉 You already guessed it! The word was **{word.upper()}**! Click 'Play Again' for a new round."
                 elif status == "lost":
-                    return f"💀 The sequence was **{word.upper()}**. Reset the mainframe terminal to try again."
+                    return f"The word was **{word.upper()}**. Don't worry, click 'Play Again' and try another one!"
                 else:
                     return self.generate_hint(word, guessed, tries)
-            else:
-                return "💡 The game is currently in standby. Start a round to receive tactical decryption hints!"
+            return "💡 Start a game and I will be happy to give you a hint!"
 
-        # 2. Check for Developer & Portfolio Inquiries
-        if any(w in msg for w in ["developer", "creator", "who made", "who created", "who built", "about you", "author"]):
-            skills_str = "\n".join([f"  • {s}" for s in self.portfolio_data["skills"]])
+        # 2. Who is the developer?
+        if any(w in msg for w in ["developer", "creator", "who made", "who built", "author", "kisne banaya"]):
             return (
-                f"👨‍💻 **Architect Profile: {self.developer_name}**\n\n"
-                f"**Role**: {self.portfolio_data['role']}\n"
-                f"**Core Superpowers**:\n{skills_str}\n\n"
-                f"**Status**: {self.portfolio_data['hire_status']}\n\n"
-                f"Feel free to ask for contact details or custom AI agent services!"
+                f"👨‍💻 **Meet the Developer: {self.developer_name}**\n\n"
+                f"He is a talented **Full-Stack Python & AI Developer** who builds smart AI applications, "
+                f"chatbots, and modern web apps.\n\n"
+                f"• **GitHub**: [github.com/SainBux-HadiSeelro](https://github.com/SainBux-HadiSeelro)\n"
+                f"• **Email**: `{self.contact_email}`\n\n"
+                f"He is available for projects and full-time work!"
             )
 
-        # 3. Check for Hiring / Contact / Services
-        if any(w in msg for w in ["hire", "contact", "email", "job", "freelance", "services", "collaborate", "work with"]):
-            services_str = "\n".join([f"  • {s}" for s in self.portfolio_data["services"]])
+        # 3. How to hire / Contact
+        if any(w in msg for w in ["hire", "contact", "email", "job", "freelance", "work", "rabta"]):
             return (
-                f"🚀 **Commercial & Collaboration Engagements**\n\n"
-                f"**{self.developer_name}** provides high-tier agentic systems and AI engineering:\n"
-                f"{services_str}\n\n"
-                f"📬 **Direct Contact**: `{self.contact_email}`\n"
-                f"💼 Available for autonomous agent architecture, AI MVPs, and production systems."
+                f"🤝 **Want to work with {self.developer_name}?**\n\n"
+                f"You can reach out directly via email:\n"
+                f"📧 **`{self.contact_email}`**\n\n"
+                f"He creates custom AI chatbots, web applications, and automation systems for clients!"
             )
 
-        # 4. Check for Tech Stack / Architecture / How it works
-        if any(w in msg for w in ["tech stack", "architecture", "technologies", "how was this made", "code", "specs"]):
+        # 4. How to play
+        if any(w in msg for w in ["rule", "how to play", "kese khelein", "instructions", "game"]):
             return (
-                "🏗️ **System Architecture Overview**:\n\n"
-                "• **Frontend & State Engine**: Streamlit 1.45+ with Reactive Component State & Custom Cyberpunk CSS\n"
-                "• **Agent Intelligence**: NEXUS-7 Autonomous Agent Engine (NLP Intent Classification + Dual Mode Fallback)\n"
-                "• **Game Core**: Finite State Machine (Init -> Playing -> Decrypted/Breached) with real-time heuristic hints\n"
-                "• **Styling**: Cyberpunk Glassmorphism with neon cyan (`#00f0ff`) & purple (`#bf00ff`) dynamic palettes\n\n"
-                "Check out [SPECS.md](file:///d:/1-New%20folder/5_Hangman%20Python%20Project/SPECS.md) in the project root for full architectural diagrams!"
+                "🎮 **How to Play Hangman (Super Easy!)**:\n\n"
+                "1. A secret word is hidden behind blank lines (`_ _ _`).\n"
+                "2. Click any letter on the on-screen keyboard to guess.\n"
+                "3. If the letter is right, it shows up in **green**! ✅\n"
+                "4. If it's wrong, you lose 1 heart ❤️ and a part of the hangman appears.\n"
+                "5. Guess the whole word before you run out of 6 hearts to win!"
             )
 
-        # 5. Check for Game Rules / Commands
-        if any(w in msg for w in ["rule", "how to play", "instructions", "commands"]):
+        # 5. Greetings
+        if any(w in msg for w in ["hi", "hello", "hey", "salam", "assalam", "kese ho"]):
             return (
-                "🎮 **Cyber Hangman Decryption Directives**:\n\n"
-                "1. **Mission**: Decrypt the encrypted tech/AI sequence letter by letter before containment failure.\n"
-                "2. **Controls**: Click the virtual cyber keyboard or enter single character inputs.\n"
-                "3. **Tolerances**: Each incorrect guess destabilizes the cyber core by 1 level.\n"
-                "4. **AI Assistance**: Ask me for `/hint` at any stage if containment is reaching critical limits!"
+                f"😊 **Hello! / Salam!** Glad to see you here!\n\n"
+                f"I am ready to help you play Hangman or answer any questions about this project. "
+                f"Just click **'Get a Hint'** if you need a clue!"
             )
 
-        # 6. Check for Greetings
-        if any(w in msg for w in ["hi", "hello", "hey", "salam", "hola", "sup"]):
-            return (
-                f"👋 **Online and monitoring 24/7!** Welcome back. How can I assist your terminal session today? "
-                f"Try asking for a **game hint**, **tech stack**, or **developer portfolio**."
-            )
-
-        # 7. Fallback Agent Response (Conversational & Intelligent)
+        # 6. Fallback
         return (
-            f"🤖 **NEXUS-7 Heuristic Response**:\n\n"
-            f"I processed your query: *\"{user_message}\"*\n\n"
-            f"As an autonomous portfolio & gameplay agent, I can immediately provide:\n"
-            f"• **Game Hints**: Type `'hint'` or ask for letter guidance.\n"
-            f"• **Developer Info**: Ask about **{self.developer_name}**'s skills, background, or projects.\n"
-            f"• **Hire/Contact**: Ask about hiring, freelancing, or contact email.\n"
-            f"• **Technical Specs**: Ask about how this project is built and engineered."
+            f"🤖 I'm here to help! You can ask me:\n"
+            f"• *'Give me a hint'* for a clue about the word.\n"
+            f"• *'How to play'* for simple game rules.\n"
+            f"• *'Who is the developer?'* to learn about {self.developer_name}."
         )
